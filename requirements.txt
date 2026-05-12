@@ -1,0 +1,71 @@
+# =========================
+# Core LangChain Packages
+# =========================
+langchain
+langchain-core
+langchain-community
+langchain-openai
+langchain-groq
+
+# =========================
+# LangGraph (React Agent)
+# =========================
+langgraph
+
+# =========================
+# Environment Variables
+# =========================
+python-dotenv
+
+# =========================
+# Tavily Search Tool
+# =========================
+tavily-python
+
+# =========================
+# Web Scraping (BeautifulSoup)
+# =========================
+beautifulsoup4
+requests
+lxml
+
+# =========================
+# Groq AI
+# =========================
+groq
+
+# =========================
+# LCEL / Runnable Pipeline
+# =========================
+pydantic
+
+# =========================
+# Async & HTTP Clients
+# =========================
+httpx
+aiohttp
+
+# =========================
+# Tokenization
+# =========================
+tiktoken
+
+# =========================
+# Retry / Robustness
+# =========================
+tenacity
+
+# =========================
+# Logging & Display
+# =========================
+rich
+
+# =========================
+# Testing
+# =========================
+pytest
+
+# =========================
+# Optional Monitoring
+# =========================
+langsmith
