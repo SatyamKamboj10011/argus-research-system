@@ -1,71 +1,20 @@
-# =========================
-# Core LangChain Packages
-# =========================
+fastapi
+uvicorn
 langchain
 langchain-core
-langchain-community
-langchain-openai
 langchain-groq
-
-# =========================
-# LangGraph (React Agent)
-# =========================
+langchain-google-genai
+langchain-ollama
+langchain-openai
+langchain-community
 langgraph
-
-# =========================
-# Environment Variables
-# =========================
-python-dotenv
-
-# =========================
-# Tavily Search Tool
-# =========================
 tavily-python
-
-# =========================
-# Web Scraping (BeautifulSoup)
-# =========================
 beautifulsoup4
 requests
 lxml
-
-# =========================
-# Groq AI
-# =========================
-groq
-
-# =========================
-# LCEL / Runnable Pipeline
-# =========================
+python-dotenv
 pydantic
-
-# =========================
-# Async & HTTP Clients
-# =========================
-httpx
-aiohttp
-
-# =========================
-# Tokenization
-# =========================
-tiktoken
-
-# =========================
-# Retry / Robustness
-# =========================
 tenacity
-
-# =========================
-# Logging & Display
-# =========================
 rich
-
-# =========================
-# Testing
-# =========================
-pytest
-
-# =========================
-# Optional Monitoring
-# =========================
-langsmith
+tiktoken
+python-multipart
