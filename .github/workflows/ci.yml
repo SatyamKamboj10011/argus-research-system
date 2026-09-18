@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Lint
+        run: ruff check argus tests
+
+      - name: Format check
+        run: ruff format --check argus tests
+
+      - name: Test
+        # Dummy keys: the suite stubs every network call and must never need real ones.
+        env:
+          TAVILY_API_KEY: test-key
+          GROQ_API_KEY: test-key
+        run: pytest -q
+
+  frontend:
+    name: Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+  docker:
+    name: Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          load: true
+          tags: argus:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Smoke test the image
+        run: |
+          docker run -d --name argus -p 8000:8000 -e TAVILY_API_KEY=test -e GROQ_API_KEY=test argus:ci
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:8000/ > /dev/null; then
+              echo "Container is serving."
+              curl -fsS http://localhost:8000/ | tee /dev/stderr | grep -q '"status":"online"'
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Container never became healthy:" >&2
+          docker logs argus >&2
+          exit 1
