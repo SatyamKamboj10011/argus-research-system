@@ -1,0 +1,21 @@
+# Normalise text in the repository, check out with the platform's own endings.
+* text=auto
+
+# Binary assets must never be line-ending converted. core.autocrlf=true would
+# otherwise rewrite bytes inside these on checkout and corrupt them.
+*.pdf   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.webp  binary
+*.woff  binary
+*.woff2 binary
+
+# Scripts that must keep LF to run on Linux, whatever the clone platform.
+*.sh    text eol=lf
+Dockerfile text eol=lf
+
+# Generated; keep it out of diffs and language stats.
+frontend/package-lock.json -diff linguist-generated
